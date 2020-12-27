@@ -15,6 +15,6 @@
     "graphql-yoga": "^1.16.7"
   },
   "devDependencies": {
-    "nodemon": "^1.17.5"
+    "nodemon": "^2.0.6"
   }
 }

@@ -31,7 +31,8 @@ const resolvers = {
             return {
                 id: '123098',
                 name: 'Mike',
-                email: 'mike@example.com'
+                email: 'mike@example.com',
+                age: 29
             }
         },
         post() {
