@@ -1,5 +1,13 @@
 import { GraphQLServer } from 'graphql-yoga'
+import myCurrentLocation, {message, myName} from './myModule'
+import myAddFunction, {substract} from './math'
 
+console.log(myAddFunction(1, -2))
+console.log(substract(10, 2))
+console.log(message)
+console.log(myName)
+console.log(myCurrentLocation)
+console.log(getGreeting('Jessica'))
 // Scalar types - String, Boolean, Int, Float, ID
 
 // Demo user data
