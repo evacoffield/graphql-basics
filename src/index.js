@@ -1,5 +1,5 @@
 import { GraphQLServer } from 'graphql-yoga'
-import myCurrentLocation, {message, myName} from './myModule'
+import myCurrentLocation, {message, myName, getGreeting} from './myModule'
 import myAddFunction, {substract} from './math'
 
 console.log(myAddFunction(1, -2))
