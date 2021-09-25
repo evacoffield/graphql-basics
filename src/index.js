@@ -1,4 +1,5 @@
 import { GraphQLServer } from 'graphql-yoga'
+import uuidv4 from 'uuid/v4'
 
 // Scalar types - String, Boolean, Int, Float, ID
 
@@ -73,6 +74,10 @@ const typeDefs = `
         post: Post!
     }
 
+    type Mutation {
+        createUser(name: String!, email: String!, age: Int): User!
+    }
+
     type User {
         id: ID!
         name: String!
@@ -110,19 +115,19 @@ const resolvers = {
                 return user.name.toLowerCase().includes(args.query.toLowerCase())
             })
         },
-posts(parent, args, ctx, info) {
-    if(!args.query) {
-        return posts
-    }
-    return posts.filter((post) => {
-        const isTitleMatch = post.title.toLowerCase().includes(args.query.toLowerCase())
-        const isBodyMatch = post.body.toLowerCase().includes(args.query.toLowerCase())
-        return isTitleMatch || isBodyMatch
-    })
-},
-comments(parent, args, ctx, info) {
-    return comments
-},
+        posts(parent, args, ctx, info) {
+            if(!args.query) {
+                return posts
+            }
+            return posts.filter((post) => {
+                const isTitleMatch = post.title.toLowerCase().includes(args.query.toLowerCase())
+                const isBodyMatch = post.body.toLowerCase().includes(args.query.toLowerCase())
+                return isTitleMatch || isBodyMatch
+            })
+        },
+        comments(parent, args, ctx, info) {
+            return comments
+        },
         me() {
             return {
                 id: '123098',
@@ -138,6 +143,22 @@ comments(parent, args, ctx, info) {
                 body: '',
                 published: false,
             }
+        }
+    },
+    Mutation: {
+        createUser(parent, args, ctx, info) {
+            const emailTaken = users.some((user) => user.email === args.email)
+            if (emailTaken) {
+                throw new Error('Email taken.')
+            }
+            const user = {
+                id: uuidv4(),
+                name: args.name,
+                email: args.email,
+                age: args.age,
+            }
+            users.push(user)
+            return user
         }
     },
     Post: {
