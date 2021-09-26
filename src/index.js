@@ -154,6 +154,16 @@ const resolvers = {
             if (emailTaken) {
                 throw new Error('Email taken.')
             }
+
+            const one ={
+                name: 'Philadelphia',
+                country: 'USA'
+            }
+
+            const two = {
+                pupulation: 1500000,
+                ...one
+            }
             const user = {
                 id: uuidv4(),
                 name: args.name,
