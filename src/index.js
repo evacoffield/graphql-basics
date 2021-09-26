@@ -77,7 +77,7 @@ const typeDefs = `
     type Mutation {
         createUser(data: CreateUserInput!): User!
         createPost(data: CreatePostInput!): Post!
-        createComment(text: String!, author: ID!, post: ID!): Comment!
+        createComment(data: CreateCommentInput!): Comment!
     }
 
     input CreateUserInput {
@@ -91,6 +91,12 @@ const typeDefs = `
         body: String!
         published: Boolean!
         author: ID!
+    }
+
+    input CreateCommentInput {
+        text: String!
+        author: ID!
+        post: ID!
     }
 
     type User {
@@ -163,7 +169,7 @@ const resolvers = {
     Mutation: {
         createUser(parent, args, ctx, info) {
             // Make sure that there is no user with that email 
-            const emailTaken = users.some((user) => user.email === args.email)
+            const emailTaken = users.some((user) => user.email === args.data.email)
             if (emailTaken) {
                 throw new Error('Email taken.')
             }
@@ -192,16 +198,16 @@ const resolvers = {
         },
         createComment(parent, args, ctx, info) {
             //Make sure that a users exists
-            const userExists = users.some((user) => user.id === args.author)
+            const userExists = users.some((user) => user.id === args.data.author)
             //Make sure that a published post exists
-            const postExists = posts.some((post) => post.id === args.post && post.published)
+            const postExists = posts.some((post) => post.id === args.data.post && post.published)
             if (!userExists || !postExists) {
                 throw new Error('Unable to find user and post')
             }
 
             const comment = {
                 id: uuidv4(),
-                ...args,
+                ...args.data,
             }
 
             comments.push(comment)
