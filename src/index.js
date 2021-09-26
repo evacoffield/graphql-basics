@@ -75,9 +75,15 @@ const typeDefs = `
     }
 
     type Mutation {
-        createUser(name: String!, email: String!, age: Int): User!
+        createUser(data: CreateUserInput): User!
         createPost(title: String!, body: String!, published: Boolean!, author: ID!): Post!
         createComment(text: String!, author: ID!, post: ID!): Comment!
+    }
+
+    input CreateUserInput {
+        name: String!
+        email: String!
+        age: Int
     }
 
     type User {
@@ -157,7 +163,7 @@ const resolvers = {
 
             const user = {
                 id: uuidv4(),
-                ...args,
+                ...args.data,
             }
             users.push(user)
             return user
