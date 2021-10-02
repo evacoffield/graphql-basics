@@ -89,20 +89,20 @@ const Mutation = {
       if (postIndex === -1) {
           throw new Error('Post not found')
       }
-      const deletedPosts = db.posts.splice(postIndex, 1)
+      const [post] = db.posts.splice(postIndex, 1)
       db.comments = db.comments.filter((comment) => comment.post !== args.id)
 
       // Alert subscribers only if the post was published
       // Deleting unpublished posts will not alert the subscribers
-      if (deletedPosts[0].published) {
+      if (post.published) {
           pubsub.publish('post', {
               post: {
                   mutation: 'DELETED',
-                  data: deletedPosts[0]
+                  data: post
               }
           })
       }
-      return deletedPosts[0]
+      return post
   },
   updatePost(parent, args, { db }, info) {
     const { id, data } = args
